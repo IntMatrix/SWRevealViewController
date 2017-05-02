@@ -969,7 +969,9 @@ const int FrontViewPositionNone = 0xff;
 {
     // we use the stored userInteraction state just in case a developer decided
     // to have our view interaction disabled beforehand
-    [_contentView setUserInteractionEnabled:_userInteractionStore];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [_contentView setUserInteractionEnabled:_userInteractionStore];
+    });
     [_contentView setDisableLayout:NO];
 }
 
@@ -1405,6 +1407,7 @@ const int FrontViewPositionNone = 0xff;
     void (^animations)() = ^()
     {
         // Calling this in the animation block causes the status bar to appear/dissapear in sync with our own animation
+#warning check if this line causes any issue - setNeedsStatusBarAppearanceUpdate
         [self setNeedsStatusBarAppearanceUpdate];
         
         // We call the layoutSubviews method on the contentView view and send a delegate, which will
@@ -1696,12 +1699,16 @@ const int FrontViewPositionNone = 0xff;
     if ( self.storyboard && _rearViewController == nil )
     {
         //Try each segue separately so it doesn't break prematurely if either Rear or Right views are not used.
+        
+        //Segue SWSegueRearIdentifier was commented because only right vc is used in my project
+        /*
         @try
         {
             [self performSegueWithIdentifier:SWSegueRearIdentifier sender:nil];
         }
         @catch(NSException *exception) {}
-        
+        */
+         
         @try
         {
             [self performSegueWithIdentifier:SWSegueFrontIdentifier sender:nil];
