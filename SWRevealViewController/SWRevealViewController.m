@@ -1859,6 +1859,11 @@ NSString * const SWSegueRightIdentifier = @"sw_right";
     SWRevealViewController *rvc = self.sourceViewController;
     UIViewController *dvc = self.destinationViewController;
     
+    if (![identifier isEqualToString:SWSegueFrontIdentifier] &&
+        [UIView userInterfaceLayoutDirectionForSemanticContentAttribute:dvc.view.semanticContentAttribute] == UIUserInterfaceLayoutDirectionRightToLeft) {
+        identifier = [identifier isEqualToString:SWSegueRearIdentifier] ? SWSegueRightIdentifier : SWSegueRearIdentifier;
+    }
+    
     if ( [identifier isEqualToString:SWSegueFrontIdentifier] )
         operation = SWRevealControllerOperationReplaceFrontController;
     
